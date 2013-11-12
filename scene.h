@@ -1,55 +1,38 @@
+#ifndef SCENE_H
+#define SCENE_H
+
 #include <Eigen/Dense>
+#include "core.h"
+#include "lights.h"
+#include "objects.h"
 using namespace Eigen;
 
-/* Light source */
-class Light
+class Sampler
 {
 public:
-	Vector3f position;
-	Vector3f direction;
-	Vector3f intensity; /* Intensity in each direction. Lies in 0-1. */
-	Vector3f attenuation; /* Attenuation factor in each direction. If 0, no attenuation. Max value of 1. */
+	float x_max, y_max;
+	Sampler();
+	Sampler(float x, float y);
+	bool getSample(Sample* sample);
 };
 
-/* A ray of light */
-struct Ray
-{
-	Vector3f origin;
-	Vector3f direction;
-};
-
-/* Surface types */
-enum SurfaceType {SMOOTH, ROUGH};	/* Currently supporting only smooth and rough surfaces. Later another class for detailed surface definition can be added */
-
-/* Generic Object */
-class Object
+class Camera	/* Currently not used as camera is assumed to be at origin */
 {
 public:
-	Vector3f position;
-	SurfaceType surface;
+	Vector3f position, lookAt, up;
+	Vector3f u, v, w; /* coordinate system generated from camera and viewing plane positions */
+	float fov_x, fov_y; /* field of view */
+	int width, height; /* Image plane dimensions */
+	Camera(Vector3f pos, Vector3f lAt, Vector3f u_, float fx, float fy, int wid, int hei);
+	void generateRay(Sample& sample, Ray* ray);
 };
-
-/* Sphere object */
-class Sphere: public Object
-{
-public:
-	float radius;
-	Sphere(Vector3f position, Surfacetype surface, float radius);
-	~Sphere();
-};
-
-/* Sphere intersection */
-struct SphereIntersection
-{
-	
-};
-
-/* To be added later
+/*
 class Scene
 {
 public:
-	Scene(Object *objects, Light *lights);
-	~Scene();
+	Scene(Object* objects, Light* lights);
 
 };
 */
+
+#endif
