@@ -1,6 +1,7 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include <math.h>
 #include <Eigen/Dense>
 using namespace Eigen;
 

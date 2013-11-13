@@ -4,6 +4,7 @@ Sampler::Sampler()
 {
 	x_max = 800;
 	y_max = 600;
+	sample = new Sample;
 }
 
 Sampler::Sampler(float x, float y)
@@ -12,19 +13,24 @@ Sampler::Sampler(float x, float y)
 	y_max = y;
 }
 
-bool Sampler::getSample(Sample* sample)
+bool Sampler::getSample(Sample* s)
 {
 	/*currently returns at one sample per pixel */
-	if ((*sample).x<x_max) {
-		(*sample).x++;
+	if ((*s).x<x_max) {
+		(*s).x++;
 		return true;
 	}
-	else if ((*sample).y<y_max) {
-		(*sample).x = 0;
-		(*sample).y++;
+	else if ((*s).y<y_max) {
+		(*s).x = 0;
+		(*s).y++;
 		return true;
 	}
 	else return false;
+}
+
+bool Sampler::getSample()
+{
+	return getSample(sample);
 }
 
 Camera::Camera(Vector3f pos, Vector3f lAt, Vector3f u_, float fx, float fy, int wid = 800, int hei = 600)
@@ -53,4 +59,25 @@ void Camera::generateRay(Sample& sample, Ray* ray)
 	(*ray).origin = position;
 	(*ray).direction = a*u + b*v - w;
 	(*ray).direction.normalize();
+}
+
+Scene::Scene(std::vector<GeoPrimitive*> p, std::vector<Light*> l)
+{
+	primitives = p;
+	lights = l;
+}
+
+void Scene::addPrimitiveToScene(GeoPrimitive* p)
+{
+	primitives.push_back(p);
+}
+
+void Scene::addLightToScene(Light* l)
+{
+	lights.push_back(l);
+}
+
+Scene::Scene()
+{
+	
 }

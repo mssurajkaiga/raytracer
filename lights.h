@@ -1,5 +1,6 @@
 #ifndef LIGHTS_H
 #define LIGHTS_H
+#include "core.h"
 #include <Eigen/Dense>
 using namespace Eigen;
 
@@ -17,7 +18,7 @@ class DirectionalLight: public Light
 public:
 	Vector3f direction;
 	DirectionalLight(Vector3f amb, Vector3f col, Vector3f dir);
-	void generateLightRay(LocalGeo& local, Ray* ray, Vector3f* col)
+	void generateLightRay(LocalGeo& local, Ray* ray, Vector3f* col);
 };
 
 class PointLight: public Light
@@ -25,7 +26,7 @@ class PointLight: public Light
 public:
 	Vector3f position;
 	PointLight(Vector3f amb, Vector3f col, Vector3f pos);
-	void generateLightRay(LocalGeo& local, Ray* r, Vector3f* col)
+	void generateLightRay(LocalGeo& local, Ray* r, Vector3f* col);
 };
 
 #endif
