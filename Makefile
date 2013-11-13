@@ -9,8 +9,8 @@ test: test.cpp raytracer.o scene.o lights.o objects.o utility.o
 raytracer.o: raytracer.cpp scene.o
 	$(CC) $(CFLAGS) -c raytracer.cpp scene.o
 
-scene.o: scene.cpp core.o lights.o objects.o
-	$(CC) $(CFLAGS) -c scene.cpp core.o lights.o objects.o
+scene.o: scene.cpp core.o lights.o objects.o utility.o
+	$(CC) $(CFLAGS) -c scene.cpp core.o lights.o objects.o utility.o
 
 lights.o: lights.cpp
 	$(CC) $(CFLAGS) -c lights.cpp

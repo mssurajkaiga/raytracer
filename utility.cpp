@@ -1,24 +1,23 @@
 #include "utility.h"
 
-Film::film(int x, int y)
+Film::Film(int x, int y)
 {
 	size_x = x;
 	size_y = y;
-	data = new (std::nothrow) Vector3f[size_x * size_y]; /* row major storage */
+	data = new Vector3f[size_x*size_y]; /* row major storage */
 }
 
-Film::film()
+Film::Film()
 {
-	film(800, 600);
+	Film(800, 600);
 }
 
 void Film::commit(Sample& sample, Vector3f& color)
 {
-	for (int i = 0; i<3; i++)
-		data[(sample.y-1) * size_y + sample.x][i] = color[i];
+	*(data + (int)((sample.y-1)*size_y + sample.x)) = color;
 }
 
-void Film::output(string filename)
+void Film::output(std::string filename)
 {
 	return;
 }

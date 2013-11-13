@@ -5,7 +5,7 @@
 #include "core.h"
 #include "lights.h"
 #include "objects.h"
-#include "raytracer.h"
+#include "utility.h"
 using namespace Eigen;
 
 #include <vector>
@@ -37,12 +37,10 @@ class Scene
 public:
 	std::vector<GeoPrimitive*> primitives; /* vector to store pointers to primitives */
 	std::vector<Light*> lights; /* vector to store pointers to lights */
-	RayTracer* raytracer;
 	Scene();
 	Scene(std::vector<GeoPrimitive*> p, std::vector<Light*> l);
 	void addPrimitiveToScene(GeoPrimitive* p);
 	void addLightToScene(Light* l);
-	void render();
 };
 
 
