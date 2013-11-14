@@ -84,6 +84,10 @@ GeoPrimitive::GeoPrimitive()
 {
 	shape = new Sphere;
 	material = new Material;
+	material->b.kd = {0,0,0};
+	material->b.ks = {0,0,0};
+	material->b.ka = {0,0,0};
+	material->b.kr = {0,0,0};
 }
 
 GeoPrimitive::GeoPrimitive(Shape* s, Material* m)

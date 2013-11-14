@@ -1,10 +1,11 @@
 CC = g++
-CFLAGS = -I eigen/
+CFLAGS = -I ./eigen/ -I ./EasyBMP/
+BMP = EasyBMP/EasyBMP.cpp
 
 all: test
 
 test: test.cpp raytracer.o scene.o lights.o objects.o utility.o
-	$(CC) $(CFLAGS) test.cpp raytracer.o scene.o lights.o objects.o utility.o -o test
+	$(CC) $(CFLAGS) test.cpp raytracer.o scene.o lights.o objects.o utility.o $(BMP) -o test
 
 raytracer.o: raytracer.cpp scene.o
 	$(CC) $(CFLAGS) -c raytracer.cpp scene.o

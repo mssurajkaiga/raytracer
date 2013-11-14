@@ -5,9 +5,8 @@
 /* Material Type */
 class Material
 {
-private:
-	Brdf b;
 public:
+	Brdf b;
 	void getBrdf(LocalGeo& local, Brdf* brdf);
 };
 
@@ -45,6 +44,8 @@ struct Intersection;
 class Primitive
 {
 public:
+	Shape* shape;
+	Material* material;
 	virtual bool intersect(Ray& ray, float* t_hit, Intersection* in) = 0;
 	virtual void getBrdf(LocalGeo& local, Brdf* brdf) = 0;
 };
@@ -60,8 +61,6 @@ struct Intersection
 class GeoPrimitive: public Primitive
 {
 public:
-	Shape* shape;
-	Material* material;
 	GeoPrimitive();
 	GeoPrimitive(Shape* s, Material* mat);
 	bool intersect(Ray& ray, float* t_hit, Intersection* in);

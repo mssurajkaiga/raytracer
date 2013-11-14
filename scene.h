@@ -9,14 +9,15 @@
 using namespace Eigen;
 
 #include <vector>
+#include <iostream>
 
 class Sampler
 {
 public:
-	float x_max, y_max;
+	int x_max, y_max;
 	Sample* sample;
 	Sampler();
-	Sampler(float x, float y);
+	Sampler(int x, int y);
 	bool getSample(Sample* s);
 	bool getSample();
 };

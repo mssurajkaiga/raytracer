@@ -7,20 +7,21 @@ Sampler::Sampler()
 	sample = new Sample;
 }
 
-Sampler::Sampler(float x, float y)
+Sampler::Sampler(int x, int y)
 {
 	x_max = x;
 	y_max = y;
+	sample = new Sample;
 }
 
 bool Sampler::getSample(Sample* s)
 {
 	/*currently returns at one sample per pixel */
-	if ((*s).x<x_max) {
+	if ((*s).x<x_max-1) {
 		(*s).x++;
 		return true;
 	}
-	else if ((*s).y<y_max) {
+	else if ((*s).y<y_max-1) {
 		(*s).x = 0;
 		(*s).y++;
 		return true;
@@ -55,10 +56,11 @@ void Camera::generateRay(Sample& sample, Ray* ray)
 	float a,b;
 	a = tan(fov_x/2) * (sample.x - width/2) * 2 / width;
 	b = tan(fov_y/2) * (height/2 - sample.y) * 2 / height;
+	//std::cout<<"A = "<<a<<" B = "<<b<<"\n";
 	/* can precompute tan, height/2 and width/2 values in constructor to speed up */
-	(*ray).origin = position;
-	(*ray).direction = a*u + b*v - w;
-	(*ray).direction.normalize();
+	ray->origin = position;
+	ray->direction = a*u + b*v - w;
+	ray->direction.normalize();
 }
 
 Scene::Scene(std::vector<GeoPrimitive*> p, std::vector<Light*> l)
