@@ -55,7 +55,7 @@ bool Sphere::intersect(Ray& r, float* t_hit, LocalGeo* local)
 
 		else if (t1>=r.t_min && t1<=r.t_max) {
 			*t_hit = t1;
-			(*local).position = r.origin + (*t_hit)*r.direction;
+			local->position = r.origin + (*t_hit)*r.direction;
 			/* calculate local.normal */
 			return true;
 		}

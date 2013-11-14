@@ -19,55 +19,58 @@ void RayTracer::trace(Ray& ray, int depth, Vector3f* color)
 	if (!(camera || scene)) return;
 
 	if(depth>threshold) {
-		*color = {0,0,0};
+		*color = {1,1,0};
 		return;
 	}
 
 	/* calculate intersection for each object in scene and determine which is closest */
-	float th, th_max = 0;
-	bool hit;
+	float th, th_min = INFINITY;
+	bool hit = false, per_hit = false;
 	Intersection in;
-	Intersection *in_max;
+	Intersection *in_min;
 	Brdf brdf;
 	Vector3f lcolor, temp;
 	Ray lray;
+	int i = 0;
 
-	for (std::vector<GeoPrimitive*>::iterator it = scene->primitives.begin() ; it != scene->primitives.end(); ++it) {
-		hit = (*(*it)).intersect(ray, &th, &in);
-		//std::cout<<"Hit - "<<hit<<"\n t = "<<th<<"\n local position - "<<in.local.position[0]<<','<<in.local.position[1]<<','<<in.local.position[2]<<"\n";
-		if (th>th_max) {
-			th_max = th;
-			in_max = &in;
+	for (std::vector<GeoPrimitive*>::iterator it = scene->primitives.begin(); it != scene->primitives.end(); it++) {
+		th = INFINITY;
+		per_hit = (*it)->intersect(ray, &th, &in);
+		//std::cout<<"\nHit - "<<hit<<"\n t = "<<th<<"\n local position - "<<in.local.position[0]<<','<<in.local.position[1]<<','<<in.local.position[2]<<"\n";
+		if (per_hit && th<th_min) {
+			th_min = th;
+			in_min = &in;
+			std::cout<<"Hit = "<<per_hit<<"\t"<<i<<"\t";
+			hit = true;
 		}
+		i++;
 	}
+	std::cout<<th_min<<"\n";
+	//std::cout<<"\n";
 
 	if (!hit) {
-		*color = {0,0,0};
+		*color = {1,1,1};
 		return;
 	}
 
 	else {
-		in.primitive->getBrdf(in.local, &brdf);
+		in_min->primitive->getBrdf(in.local, &brdf);
 	}
 
 	for (std::vector<Light*>::iterator it = scene->lights.begin() ; it != scene->lights.end(); ++it) {
-		(*it)->generateLightRay(in.local, lray, lcolor);
-
+		(*it)->generateLightRay(in_min->local, lray, lcolor);
 		bool block = false;
 		/* check for blocking by other primitives */
 		for (std::vector<GeoPrimitive*>::iterator it2 = scene->primitives.begin() ; it2 != scene->primitives.end(); ++it2) {
-			if((**it2).intersect(lray, &th, &in)) {
+			std::cout<<"Counter\t\t";
+			if((*it2)->intersect(lray, &th, &in)) {
 				block = true;
 				break;
 			}
 		}
-
-		if(block) {
-			*color = {0,0,0};
-		}
-
-		else {
-			*color = in_max->primitive->shape->color;
+		if(block) *color = {1,1,1};
+		if(!block) {
+			*color = in_min->primitive->shape->color;
 		}
 		/*
 		if(!block) {
@@ -88,6 +91,8 @@ void RayTracer::trace(Ray& ray, int depth, Vector3f* color)
 		*/
 
 	}
+
+	//std::cout<<"\n t_min = "<<th_min;
 
 	if(brdf.kr[0]>0 && brdf.kr[1]>0 && brdf.kr[2]>0) {
 		Vector3f rm = (2*(in.local.normal.dot(ray.direction))*(in.local.normal) - ray.direction);
