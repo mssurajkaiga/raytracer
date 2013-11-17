@@ -7,7 +7,9 @@ class Material
 {
 public:
 	Brdf b;
-	void getBrdf(LocalGeo& local, Brdf* brdf);
+	Material();
+	Material(Brdf brdf);
+	void getBrdf(LocalGeo& local, Brdf* brdf); /* not needed for now */
 };
 
 /* Abstract Shape */
@@ -47,7 +49,8 @@ public:
 	Shape* shape;
 	Material* material;
 	virtual bool intersect(Ray& ray, float* t_hit, Intersection* in) = 0;
-	virtual void getBrdf(LocalGeo& local, Brdf* brdf) = 0;
+	//virtual void getBrdf(LocalGeo& local, Brdf* brdf) = 0;
+	virtual Brdf* getBrdf(LocalGeo& local) = 0;
 };
 
 /* Intersection */
@@ -64,7 +67,8 @@ public:
 	GeoPrimitive();
 	GeoPrimitive(Shape* s, Material* mat);
 	bool intersect(Ray& ray, float* t_hit, Intersection* in);
-	void getBrdf(LocalGeo& local, Brdf* brdf);
+	//void getBrdf(LocalGeo& local, Brdf* brdf); - don't know why this produces stupid values
+	Brdf* getBrdf(LocalGeo& local);
 };
 
 #endif

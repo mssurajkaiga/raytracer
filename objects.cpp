@@ -1,9 +1,28 @@
 #include "objects.h"
 #include <math.h>
+#include <iostream>
+
+Material::Material()
+{
+	b.kd = Vector3f(0,0,0);
+	b.ks = Vector3f(0,0,0);
+	b.ka = Vector3f(0,0,0);
+	b.kr = Vector3f(0,0,0);
+	b.s = 0.0;
+}
+
+Material::Material(Brdf brdf)
+{
+	b.kd = brdf.kd;
+	b.ks = brdf.ks;
+	b.ka = brdf.ka;
+	b.kr = brdf.kr;
+	b.s = brdf.s;
+}
 
 void Material::getBrdf(LocalGeo& local, Brdf* brdf)
 {
-	brdf = &b;;
+	brdf = &b;
 }
 
 Sphere::Sphere()
@@ -30,6 +49,7 @@ bool Sphere::intersect(Ray& r, float* t_hit, LocalGeo* local)
 
 	D = B * B - 4 * A * C; /* discriminant for calculating if intersection occurs or not */
 	if (D<0) {
+		*t_hit = INFINITY;
 		return false;
 	}
 
@@ -45,11 +65,13 @@ bool Sphere::intersect(Ray& r, float* t_hit, LocalGeo* local)
 		if (t1<r.t_min && t2>=r.t_min) {
 			if (t2<=r.t_max) {
 				*t_hit = t2;
-				(*local).position = r.origin + (*t_hit)*r.direction;
+				local->position = r.origin + (*t_hit)*r.direction;
 				/* calculate local.normal */
+				local->normal = local->position - center;
+				local->normal.normalize();
 				return true;
 			}
-
+			*t_hit = INFINITY;
 			return false;
 		}
 
@@ -57,9 +79,11 @@ bool Sphere::intersect(Ray& r, float* t_hit, LocalGeo* local)
 			*t_hit = t1;
 			local->position = r.origin + (*t_hit)*r.direction;
 			/* calculate local.normal */
+			local->normal = local->position - center;
+			local->normal.normalize();
 			return true;
 		}
-
+		*t_hit = INFINITY;
 		return false;	
 	}
 
@@ -108,7 +132,16 @@ bool GeoPrimitive::intersect(Ray& ray, float* t_hit, Intersection* in)
 	return true;
 }
 
-void GeoPrimitive::getBrdf(LocalGeo& local, Brdf *brdf)
+/*
+void GeoPrimitive::getBrdf(LocalGeo& local, Brdf* brdf)
 {
-	material->getBrdf(local, brdf);
+	//material->getBrdf(local, brdf);
+	std::cout<<"Material->b"<<material->b.ka<<"\n";
+	brdf = &(material->b);
+	std::cout<<"&(material->b)"<<brdf->ka<<"\n";
+}
+*/
+Brdf* GeoPrimitive::getBrdf(LocalGeo& local)
+{
+	return &(material->b);
 }

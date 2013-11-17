@@ -1,16 +1,17 @@
 #include "lights.h"
 
-DirectionalLight::DirectionalLight(Vector3f amb, Vector3f col, Vector3f dir)
+DirectionalLight::DirectionalLight(Vector3f i, Vector3f col, Vector3f dir)
 {
-	ambient = amb;
+	intensity = i;
 	color = col;
 	direction = dir;
+	direction.normalize();
 	position = {INFINITY, INFINITY, INFINITY};
 }
 
-PointLight::PointLight(Vector3f amb, Vector3f col, Vector3f pos)
+PointLight::PointLight(Vector3f i, Vector3f col, Vector3f pos)
 {
-	ambient = amb;
+	intensity = i;
 	color = col;
 	position = pos;
 }
@@ -27,6 +28,7 @@ void DirectionalLight::generateLightRay(LocalGeo& local, Ray& r, Vector3f& col)
 void PointLight::generateLightRay(LocalGeo& local, Ray& r, Vector3f& col)
 {
 	r.direction = position - local.position;
+	r.direction.normalize();
 	r.origin = local.position + 0.0001 * r.direction;
 	color = col;
 }
