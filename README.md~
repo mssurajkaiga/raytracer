@@ -13,5 +13,5 @@ Example:
 make
 ./test output.bmp
 
-This creates an output.bmp file.
+This creates an output.bmp file
 
