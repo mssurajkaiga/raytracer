@@ -22,10 +22,12 @@ int main(int argc, char **argv)
 
 	/* Material Test */
 	Brdf br1 = {Vector3f(0.4, 0.4, 0.4), Vector3f(0.8, 0.8, 0.8), Vector3f(0.1,0.1,0.1), Vector3f(0.2, 0.2, 0.5), 100.0};
-	cout<<"\nbr.ka = "<<br1.ka;
+	//cout<<"\nbr.ka = "<<br1.ka;
 	Material m1(br1);
 	Brdf br2 = {Vector3f(0.2, 0.8, 0.6), Vector3f(0.7, 0.6, 0.5), Vector3f(0.5,0.5,0.5), Vector3f(0.5, 0.2, 0.3), 120.0};
 	Material m2(br2);
+	Brdf br3 = {Vector3f(0.1, 0.1, 0.7), Vector3f(0.3, 0.9, 0.3), Vector3f(0.2,0.1,0.1), Vector3f(0.7, 0.7, 0.7), 100.0};
+	Material m3(br3);
 
 	/* Primitive test */
 	Sphere sp = Sphere(Vector3f(10,0,10), Vector3f(1,0,0), 5.0);
@@ -36,8 +38,8 @@ int main(int argc, char **argv)
 	cout<<"new temp brdf = "<<temp->ka<<"\n";
 	Sphere sp2 = Sphere(Vector3f(-5,0,10), Vector3f(0,1,0), 5.0);
 	GeoPrimitive g2(&sp2, &m2);
-	Sphere sp3 = Sphere(Vector3f(0,-108,10), Vector3f(0,0,1.0), 100.0);
-	GeoPrimitive g3(&sp3, &m1);
+	Sphere sp3 = Sphere(Vector3f(0,-108,10), Vector3f(0,0,1), 100.0);
+	GeoPrimitive g3(&sp3, &m3);
 	float t_hit = 0;
 	Intersection in;
 	bool hit = g.intersect(r, &t_hit, &in);

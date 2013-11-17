@@ -65,11 +65,11 @@ void RayTracer::trace(Ray& ray, int depth, Vector3f* color)
 			}
 		}
 
-		/*
+		
 		Vector3f col;
 		calculateReflection(&col, &ray, in_min, Vector3f(1.0, 1.0, 1.0), 1, depth);
 		*color += col;
-*/
+
 		if(per_hit) {
 			*color += (brdf->ka * ambient_intensity);
 			std::cout<<"brdf->ka = "<<brdf->ka<<"\nambient_intensity = "<<ambient_intensity<<"\ncolor = "<<*color;
