@@ -5,6 +5,8 @@
 #include <Eigen/Dense>
 using namespace Eigen;
 
+#define pi 3.14159
+
 /* A ray */
 struct Ray
 {

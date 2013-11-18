@@ -7,6 +7,7 @@ class Material
 {
 public:
 	Brdf b;
+	float ri; /* refractive index */
 	Material();
 	Material(Brdf brdf);
 	void getBrdf(LocalGeo& local, Brdf* brdf); /* not needed for now */

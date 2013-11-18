@@ -6,7 +6,6 @@
 #include "utility.h"
 #include "EasyBMP.h"
 using namespace std;
-#define pi 3.14159
 
 int main(int argc, char **argv)
 {
@@ -26,7 +25,7 @@ int main(int argc, char **argv)
 	Material m1(br1);
 	Brdf br2 = {Vector3f(0.2, 0.8, 0.6), Vector3f(0.7, 0.6, 0.5), Vector3f(0.5,0.5,0.5), Vector3f(0.5, 0.2, 0.3), 120.0};
 	Material m2(br2);
-	Brdf br3 = {Vector3f(0.1, 0.1, 0.7), Vector3f(0.3, 0.9, 0.3), Vector3f(0.2,0.1,0.1), Vector3f(0.7, 0.7, 0.7), 100.0};
+	Brdf br3 = {Vector3f(0.1, 0.1, 0.7), Vector3f(0.3, 0.9, 0.3), Vector3f(0.2,0.1,0.1), Vector3f(0.7, 0.7, 0.7), 300.0};
 	Material m3(br3);
 
 	/* Primitive test */
@@ -38,7 +37,7 @@ int main(int argc, char **argv)
 	cout<<"new temp brdf = "<<temp->ka<<"\n";
 	Sphere sp2 = Sphere(Vector3f(-5,0,10), Vector3f(0,1,0), 5.0);
 	GeoPrimitive g2(&sp2, &m2);
-	Sphere sp3 = Sphere(Vector3f(0,-108,10), Vector3f(0,0,1), 100.0);
+	Sphere sp3 = Sphere(Vector3f(0,-208,10), Vector3f(0,0,1), 200.0);
 	GeoPrimitive g3(&sp3, &m3);
 	float t_hit = 0;
 	Intersection in;
@@ -46,7 +45,7 @@ int main(int argc, char **argv)
 	cout<<"Hit - "<<hit<<"\n t = "<<t_hit<<"\n local position - "<<in.local.position[0]<<','<<in.local.position[1]<<','<<in.local.position[2]<<"\n";
 
 	/* Light Test */
-	PointLight l = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(-50.0, 100.0, 10.0));
+	PointLight l = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 200.0, 10.0));
 	/* Camera test */
 	Sample s;
 	s.x = 0;

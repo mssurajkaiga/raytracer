@@ -15,7 +15,9 @@ public:
 	void trace(Ray& ray, int depth, Vector3f* color);
 	Vector3f blinnphongShader(Intersection* in, Brdf* brdf, Light* light, float ambient_intensity);
 	void generateReflectedRay(Ray* iray, Ray* rray, Intersection* in);
+	void generateRefractedRay(Ray* iray, Ray* rray, Intersection* in);
 	void calculateReflection(Vector3f* color, Ray* ray, Intersection* in, Vector3f k, float ambient_intensity, int depth);
+	void calculateRefraction(Vector3f* color, Ray* ray, Intersection* in, Vector3f k, float ambient_intensity, int depth);
 };
 
 #endif
