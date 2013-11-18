@@ -46,7 +46,6 @@ void RayTracer::trace(Ray& ray, int depth, Vector3f* color)
 	*color = {0,0,0};
 
 	if (!hit) {
-		//*color = {1,1,1};
 		return;
 	}
 
@@ -56,7 +55,6 @@ void RayTracer::trace(Ray& ray, int depth, Vector3f* color)
 
 	for (std::vector<Light*>::iterator it = scene->lights.begin() ; it != scene->lights.end(); it++) {
 		(*it)->generateLightRay(in_min->local, lray, lcolor);
-		//std::cout<<lray.origin<<"\n"<<lray.direction;
 		/* check for blocking by other primitives */
 		for (std::vector<GeoPrimitive*>::iterator it2 = scene->primitives.begin() ; it2 != scene->primitives.end(); it2++) {
 			per_hit = (*it2)->intersect(lray, &th, &in);
@@ -73,12 +71,9 @@ void RayTracer::trace(Ray& ray, int depth, Vector3f* color)
 
 		if(per_hit) {
 			*color += (brdf->ka * ambient_intensity);
-			std::cout<<"brdf->ka = "<<brdf->ka<<"\nambient_intensity = "<<ambient_intensity<<"\ncolor = "<<*color;
 		}
 		else {
 			*color += blinnphongShader(in_min, brdf, *it, ambient_intensity);
-			//*color = in_min->primitive->shape->color;
-			//std::cout<<*color<<"\nColor";
 		}
 	}
 
@@ -98,25 +93,19 @@ Vector3f RayTracer::blinnphongShader(Intersection* in, Brdf* brdf, Light* light,
 			h.normalize();
 
 			diffuse = brdf->kd.array() * light->intensity.array() * l.dot(in->local.normal);
-			//std::cout<<"\nDiffuse = "<<brdf->kd.array()<<"kd\n"<<l.dot(in->local.normal)<<"\n"<<diffuse;
 			specular = brdf->ks.array() * light->intensity.array();
-			//std::cout<<"\nSpecular = "<<specular;
 			specular *= pow(h.dot(in->local.normal), brdf->s);
-			//std::cout<<"\nSpecular = "<<specular;
 
 			for (int i = 0; i<3; i++) {
 				if (diffuse[i] < 0.0) diffuse[i] = 0.0;
 				if (specular[i] < 0.0) specular[i] = 0.0;
 			}
-			
-			//std::cout<<"\nka * intensity = "<<brdf->ka * ambient_intensity;
 
 			return diffuse + specular + brdf->ka * ambient_intensity;
 };
 
 void RayTracer::generateReflectedRay(Ray* iray, Ray* rray, Intersection* in)
 {
-	//std::cout<<"\nINR.LOCAL.NORMAL 1= "<<in->local.normal<<"\n\n";
 	rray->direction = iray->direction - in->local.normal * 2 * in->local.normal.dot(iray->direction);
 	rray->direction.normalize();
 	rray->origin = in->local.position + 0.0001 * rray->direction;
@@ -135,11 +124,6 @@ void RayTracer::generateRefractedRay(Ray* iray, Ray* rray, Intersection* in)
 	float u = in->local.normal[0];
 	float v = in->local.normal[1];
 	float w = in->local.normal[2];
-
-	//VECTOR3D V1 = incidence_ray->direction;
-	//VECTOR3D V2 = intersection->normal;
-	//normalize_vector(&V1);
-	//normalize_vector(&V2);
 	float angle = pi/2-acosf(iray->direction.dot(in->local.normal));
 	angle -= asinf(in->primitive->material->ri * sinf(angle));
 
@@ -167,7 +151,7 @@ void RayTracer::generateRefractedRay(Ray* iray, Ray* rray, Intersection* in)
 
 void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in, Vector3f k, float ambient_intensity, int depth)
 {
-	std::cout<<"Depth = "<<depth;
+	
 	if(depth>threshold)
 		return;
 
@@ -178,28 +162,25 @@ void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in,
 	generateReflectedRay(ray, &rray, in);
 	std::cout<<rray.origin<<"\n";
 	float rcos = 0.0;
-	//std::cout<<"RRAY Direction = "<<rray.direction<<"\nINR.LOCAL.NORMAL 2= "<<in->local.normal<<"\n\n";
+
 	rcos = rray.direction.dot(in->local.normal);
 	float th, th_min = INFINITY;
 	bool per_hit = false, hit = false;
 	
 	Brdf* brdf;
 	GeoPrimitive* reflected_primitive;
-	//std::cout<<"R_Angle = "<<rcos<<"\n";
+	
 	if (rcos>0.0){
 		for (std::vector<GeoPrimitive*>::iterator it = scene->primitives.begin(); it != scene->primitives.end(); it++) {
 			if((*it) == in->primitive) {
 				
 				continue;
 			}
-			//else {
-				//std::cout<<"!@#$^&*()(*&^$#@!@#$^&*(\n";
-			//}
+
 			th = INFINITY;
 			per_hit = (*it)->intersect(rray, &th, &in_r);
 			
 			if (per_hit && th<th_min) {
-				std::cout<<"Hit\n";
 				th_min = th;
 				in_min = &in_r;
 				hit = true;
@@ -208,7 +189,6 @@ void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in,
 	}
 
 	if(!hit){
-		std::cout<<"No hit\n";
 		return;
 	}
 
@@ -224,9 +204,7 @@ void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in,
 		}
 		if(per_hit) {
 			b = k.array() * brdf->ks.array() * brdf->ka.array() * ambient_intensity;
-			std::cout<<"\nb = "<<b<<"\n";
 			*color += b;
-			std::cout<<"\nnew color = "<<*color<<"\n";
 		}
 
 		else {
@@ -241,7 +219,6 @@ void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in,
 
 void RayTracer::calculateRefraction(Vector3f* color, Ray* ray, Intersection* in, Vector3f k, float ambient_intensity, int depth)
 {
-	std::cout<<"Depth = "<<depth;
 	if(depth>threshold)
 		return;
 
@@ -252,23 +229,21 @@ void RayTracer::calculateRefraction(Vector3f* color, Ray* ray, Intersection* in,
 	generateRefractedRay(ray, &tray, in);
 	generateRefractedRay(&tray, &rray, in);
 	float rcos = 0.0;
-	//std::cout<<"RRAY Direction = "<<rray.direction<<"\nINR.LOCAL.NORMAL 2= "<<in->local.normal<<"\n\n";
+
 	rcos = rray.direction.dot(in->local.normal);
 	float th, th_min = INFINITY;
 	bool per_hit = false, hit = false;
 	
 	Brdf* brdf;
 	GeoPrimitive* reflected_primitive;
-	//std::cout<<"R_Angle = "<<rcos<<"\n";
+
 	if (rcos>0.0){
 		for (std::vector<GeoPrimitive*>::iterator it = scene->primitives.begin(); it != scene->primitives.end(); it++) {
 			if((*it) == in->primitive) {
 				
 				continue;
 			}
-			//else {
-				//std::cout<<"!@#$^&*()(*&^$#@!@#$^&*(\n";
-			//}
+
 			th = INFINITY;
 			per_hit = (*it)->intersect(rray, &th, &in_r);
 			
@@ -282,7 +257,6 @@ void RayTracer::calculateRefraction(Vector3f* color, Ray* ray, Intersection* in,
 	}
 
 	if(!hit){
-		std::cout<<"No hit\n";
 		return;
 	}
 
@@ -298,9 +272,7 @@ void RayTracer::calculateRefraction(Vector3f* color, Ray* ray, Intersection* in,
 		}
 		if(per_hit) {
 			b = k.array() * brdf->ks.array() * brdf->ka.array() * ambient_intensity;
-			std::cout<<"\nb = "<<b<<"\n";
 			*color += b;
-			std::cout<<"\nnew color = "<<*color<<"\n";
 		}
 
 		else {

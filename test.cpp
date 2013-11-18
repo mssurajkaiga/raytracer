@@ -21,9 +21,8 @@ int main(int argc, char **argv)
 
 	/* Material Test */
 	Brdf br1 = {Vector3f(0.4, 0.4, 0.4), Vector3f(0.8, 0.8, 0.8), Vector3f(0.1,0.1,0.1), Vector3f(0.2, 0.2, 0.5), 100.0};
-	//cout<<"\nbr.ka = "<<br1.ka;
 	Material m1(br1);
-	Brdf br2 = {Vector3f(0.2, 0.8, 0.6), Vector3f(0.7, 0.6, 0.5), Vector3f(0.5,0.5,0.5), Vector3f(0.5, 0.2, 0.3), 120.0};
+	Brdf br2 = {Vector3f(0.2, 0.8, 0.6), Vector3f(0.2, 0.3, 0.5), Vector3f(0.1,0.1,0.1), Vector3f(0.5, 0.2, 0.3), 120.0};
 	Material m2(br2);
 	Brdf br3 = {Vector3f(0.1, 0.1, 0.7), Vector3f(0.3, 0.9, 0.3), Vector3f(0.2,0.1,0.1), Vector3f(0.7, 0.7, 0.7), 300.0};
 	Material m3(br3);
@@ -35,9 +34,9 @@ int main(int argc, char **argv)
 	LocalGeo temp2;
 	temp = g.getBrdf(temp2);
 	cout<<"new temp brdf = "<<temp->ka<<"\n";
-	Sphere sp2 = Sphere(Vector3f(-5,0,10), Vector3f(0,1,0), 5.0);
+	Sphere sp2 = Sphere(Vector3f(0,8,10), Vector3f(0,1,0), 4.0);
 	GeoPrimitive g2(&sp2, &m2);
-	Sphere sp3 = Sphere(Vector3f(0,-208,10), Vector3f(0,0,1), 200.0);
+	Sphere sp3 = Sphere(Vector3f(-8,0,10), Vector3f(0,0,1), 5.0);
 	GeoPrimitive g3(&sp3, &m3);
 	float t_hit = 0;
 	Intersection in;
@@ -45,7 +44,8 @@ int main(int argc, char **argv)
 	cout<<"Hit - "<<hit<<"\n t = "<<t_hit<<"\n local position - "<<in.local.position[0]<<','<<in.local.position[1]<<','<<in.local.position[2]<<"\n";
 
 	/* Light Test */
-	PointLight l = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 200.0, 10.0));
+	PointLight l = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 200.0, 0.0));
+	PointLight l2 = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, -100.0, 10.0));
 	/* Camera test */
 	Sample s;
 	s.x = 0;
@@ -71,6 +71,7 @@ int main(int argc, char **argv)
 	sc.addPrimitiveToScene(&g2);
 	sc.addPrimitiveToScene(&g3);
 	sc.addLightToScene(&l);
+	sc.addLightToScene(&l2);
 
 	/* Ray Tracer single trace test */
 	cout<<"\n --------- RayTracer Single Trace----------\n";

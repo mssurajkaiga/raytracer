@@ -132,15 +132,6 @@ bool GeoPrimitive::intersect(Ray& ray, float* t_hit, Intersection* in)
 	return true;
 }
 
-/*
-void GeoPrimitive::getBrdf(LocalGeo& local, Brdf* brdf)
-{
-	//material->getBrdf(local, brdf);
-	std::cout<<"Material->b"<<material->b.ka<<"\n";
-	brdf = &(material->b);
-	std::cout<<"&(material->b)"<<brdf->ka<<"\n";
-}
-*/
 Brdf* GeoPrimitive::getBrdf(LocalGeo& local)
 {
 	return &(material->b);

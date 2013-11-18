@@ -54,11 +54,8 @@ Camera::Camera(Vector3f pos, Vector3f lAt, Vector3f u_, float fx, float fy, int 
 void Camera::generateRay(Sample& sample, Ray* ray)
 {
 	float a,b;
-	//a = tan(fov_x/2) * (width/2 - sample.x) * 2 / width;
 	a = tan(fov_x/2) * (sample.x - width/2) * 2 / width;
 	b = tan(fov_y/2) * (height/2 - sample.y) * 2 / height;
-	//b = tan(fov_y/2) * (sample.y - height/2) * 2 / height;
-	//std::cout<<"A = "<<a<<" B = "<<b<<"\n";
 	/* can precompute tan, height/2 and width/2 values in constructor to speed up */
 	ray->origin = position;
 	ray->direction = a*u + b*v - w;
