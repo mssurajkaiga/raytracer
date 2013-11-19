@@ -1,17 +1,9 @@
 raytracer
 =========
 
-A ray tracer in C++. Currently, Raytracer is being integrated with CUDA.
+A ray tracer using CUDA.
 
 Instructions
 ------------
 
-Just type make. This creates an executable file 'test'.
-Run this with input parameter as the filename of the output bmp file.
-Example:
-
-make
-./test output.bmp
-
-This creates an output.bmp file.
-
+Work in progress :)
