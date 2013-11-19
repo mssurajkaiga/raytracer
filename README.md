@@ -1,7 +1,7 @@
 raytracer
 =========
 
-A ray tracer in C++. Currently, Raytracer is being integrated with CUDA.
+A ray tracer in C++. Currently, Raytracer is being integrated with CUDA. To view the progress switch to 'parallel' branch.
 
 Instructions
 ------------
