@@ -114,15 +114,45 @@ Triangle::Triangle(Vector3f* v, Vector3f col)
 bool Triangle::intersect(Ray& r, float* t_hit, LocalGeo* local)
 {
 	/* http://geomalgorithms.com/a06-_intersect-2.html */
-	Vector3f w;
-	float s,t;
+	Vector3f w0, w;
+	float s, r, t, th a, b;
 
 	*t_hit = INFINITY;
 	if (n[0]==0 && n[1]==0 && n[2]==1) {
 		return false;
 	}
 
-	
+	w0 = r.origin - vertices[0];
+	a = -normal.dot(w0);
+	b = normal.dot(r.direction);
+	if (fabs(b) < MIN_VAL) {
+		return false;
+	}
+
+	th = a/b;
+
+	if(th>r.t_max || th<r.t_min){
+		return false;
+	}
+
+    float u2, uv, v2, wu, wv, D;
+    u2 = u.squaredNorm();
+    uv = u.dot(v);
+    v2 = v.squaredNorm();
+    w = ray.origin + th * r.direction - vertices[0];
+    wu = w.dot(u);
+    wv = w.dot(v);
+    D = uv * uv - u2 * v2;
+
+    s = (uv * wv - v2 * wu) / D;
+    if (s < 0.0 || s > 1.0)
+        return false;
+    t = (uv * wu - u2 * wv) / D;
+    if (t < 0.0 || (s + t) > 1.0)
+        return false;
+    
+    *t_hit = th;
+    return true;
 }
 
 
