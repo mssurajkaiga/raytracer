@@ -88,21 +88,43 @@ bool Sphere::intersect(Ray& r, float* t_hit, LocalGeo* local)
 	}
 
 }
-/*
+
 Triangle::Triangle()
 {
 	vertices[0] = Vector3f(-1.0, 0.0, 0.0);
 	vertices[1] = Vector3f(1.0, 0.0, 0.0);
 	vertices[2] = Vector3f(0.0, 0.0, 0.0);
 	color = Vector3f(0.0, 0.0, 0.0);
+	u = Vector3f(2.0, 0.0, 0.0);
+	v = Vector3f(-1.0, 0.0, 0.0);
+	normal = Vector3f(0.0, 0.0, -2.0);
 }
 
 Triangle::Triangle(Vector3f* v, Vector3f col)
 {
 	for(int i =0; i<3; i++ ) vertices[i] = v[i];
+	/* precomputing u, v, normal for efficiency */
+	u = vertices[1] - vertices[0];
+	v = vertices[2] - vertices[0];
+	normal = u.cross(v);
+	normal.normalize();
 	color = col;
 }
-*/
+
+bool Triangle::intersect(Ray& r, float* t_hit, LocalGeo* local)
+{
+	/* http://geomalgorithms.com/a06-_intersect-2.html */
+	Vector3f w;
+	float s,t;
+
+	*t_hit = INFINITY;
+	if (n[0]==0 && n[1]==0 && n[2]==1) {
+		return false;
+	}
+
+	
+}
+
 
 GeoPrimitive::GeoPrimitive()
 {

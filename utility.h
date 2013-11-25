@@ -16,4 +16,6 @@ public:
 	void output(std::string filename);
 };
 
+
+
 #endif

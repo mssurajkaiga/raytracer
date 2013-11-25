@@ -36,7 +36,7 @@ public:
 class Triangle: public Shape
 {
 public:
-	Vector3f vertices[3], normal;
+	Vector3f vertices[3], normal, u, v;
 	Triangle();
 	Triangle(Vector3f v[], Vector3f col);
 	bool intersect(Ray& r, float* t_hit, LocalGeo* local);
