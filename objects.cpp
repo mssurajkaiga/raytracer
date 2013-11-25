@@ -152,6 +152,8 @@ bool Triangle::intersect(Ray& r, float* t_hit, LocalGeo* local)
         return false;
     
     *t_hit = th;
+    local->position = r.origin + th * r.direction;
+    local->normal = normal;
     return true;
 }
 

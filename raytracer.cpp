@@ -160,7 +160,7 @@ void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in,
 	Intersection* in_min;
 	Intersection in_r;
 	generateReflectedRay(ray, &rray, in);
-	std::cout<<rray.origin<<"\n";
+	//std::cout<<rray.origin<<"\n";
 	float rcos = 0.0;
 
 	rcos = rray.direction.dot(in->local.normal);
@@ -248,7 +248,7 @@ void RayTracer::calculateRefraction(Vector3f* color, Ray* ray, Intersection* in,
 			per_hit = (*it)->intersect(rray, &th, &in_r);
 			
 			if (per_hit && th<th_min) {
-				std::cout<<"Hit\n";
+				//std::cout<<"Hit\n";
 				th_min = th;
 				in_min = &in_r;
 				hit = true;
