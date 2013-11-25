@@ -100,9 +100,9 @@ Triangle::Triangle()
 	normal = Vector3f(0.0, 0.0, -2.0);
 }
 
-Triangle::Triangle(Vector3f* v, Vector3f col)
+Triangle::Triangle(Vector3f* v1, Vector3f col)
 {
-	for(int i =0; i<3; i++ ) vertices[i] = v[i];
+	for(int i =0; i<3; i++ ) vertices[i] = v1[i];
 	/* precomputing u, v, normal for efficiency */
 	u = vertices[1] - vertices[0];
 	v = vertices[2] - vertices[0];
@@ -115,10 +115,10 @@ bool Triangle::intersect(Ray& r, float* t_hit, LocalGeo* local)
 {
 	/* http://geomalgorithms.com/a06-_intersect-2.html */
 	Vector3f w0, w;
-	float s, r, t, th a, b;
+	float s, r1, t, th, a, b;
 
 	*t_hit = INFINITY;
-	if (n[0]==0 && n[1]==0 && n[2]==1) {
+	if (normal[0]==0 && normal[1]==0 && normal[2]==0) {
 		return false;
 	}
 
@@ -139,7 +139,7 @@ bool Triangle::intersect(Ray& r, float* t_hit, LocalGeo* local)
     u2 = u.squaredNorm();
     uv = u.dot(v);
     v2 = v.squaredNorm();
-    w = ray.origin + th * r.direction - vertices[0];
+    w = r.origin + th * r.direction - vertices[0];
     wu = w.dot(u);
     wv = w.dot(v);
     D = uv * uv - u2 * v2;
