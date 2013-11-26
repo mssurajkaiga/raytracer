@@ -9,7 +9,7 @@ class Light
 {
 public:
 	Vector3f position, intensity, color;
-	float attenuation; /* Attenuation factor. If 0, no attenuation. Max value of 1. */
+	//float attenuation; /* Attenuation factor. If 0, no attenuation. Max value of 1. */
 	virtual void generateLightRay(LocalGeo& local, Ray& ray, Vector3f& col) = 0; /* Generate ray from a position to light source */
 };
 
