@@ -26,4 +26,4 @@ core.o: core.cpp
 	$(CC) $(CFLAGS) -c core.cpp
 
 clean:
-	rm -rf *.o *.out test *.bmp *.log
+	rm -rf *.o *.out test output.bmp *.log

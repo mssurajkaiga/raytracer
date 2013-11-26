@@ -30,6 +30,12 @@ int main(int argc, char **argv)
 	/* Primitive test */
 	Sphere sp = Sphere(Vector3f(10,0,10), Vector3f(1,0,0), 5.0);
 	GeoPrimitive g(&sp, &m1);
+	Vector3f vertices[3];
+	vertices[0] = Vector3f(5,0,5);
+	vertices[1] = Vector3f(-5,0,5);
+	vertices[2] = Vector3f(0,5,5);
+	Triangle tr = Triangle(vertices, Vector3f(1,0,0));
+	GeoPrimitive t(&tr, &m3);
 	Brdf* temp;
 	LocalGeo temp2;
 	temp = g.getBrdf(temp2);
@@ -44,8 +50,8 @@ int main(int argc, char **argv)
 	cout<<"Hit - "<<hit<<"\n t = "<<t_hit<<"\n local position - "<<in.local.position[0]<<','<<in.local.position[1]<<','<<in.local.position[2]<<"\n";
 
 	/* Light Test */
-	PointLight l = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 200.0, 0.0));
-	PointLight l2 = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, -100.0, 10.0));
+	PointLight l = PointLight(Vector3f(1.0, 0.0, 0.0), Vector3f(0.0, 0.0, 0.0), Vector3f(0.0, 200.0, 0.0));
+	PointLight l2 = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 100.0, 0.0));
 	/* Camera test */
 	Sample s;
 	s.x = 0;
@@ -69,7 +75,8 @@ int main(int argc, char **argv)
 	Scene sc;
 	sc.addPrimitiveToScene(&g);
 	sc.addPrimitiveToScene(&g2);
-	sc.addPrimitiveToScene(&g3);
+	//sc.addPrimitiveToScene(&g3);
+	sc.addPrimitiveToScene(&t);
 	sc.addLightToScene(&l);
 	sc.addLightToScene(&l2);
 

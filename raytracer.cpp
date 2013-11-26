@@ -193,9 +193,10 @@ void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in,
 	}
 
 	brdf = in_min->primitive->getBrdf(in_min->local);
-
+	int i=0;
 	for (std::vector<Light*>::iterator it = scene->lights.begin(); it != scene->lights.end(); it++) {
 		(*it)->generateLightRay(in_min->local, lray, lcolor);
+		if (i++==1) std::cout<<"i=1\t";
 		for (std::vector<GeoPrimitive*>::iterator it2 = scene->primitives.begin() ; it2 != scene->primitives.end(); it2++) {
 			per_hit = (*it2)->intersect(lray, &th, &in_r);
 			if(per_hit) {
