@@ -65,8 +65,8 @@ void RayTracer::trace(Ray& ray, int depth, Vector3f* color)
 
 		
 		
-		calculateReflection(color, &ray, in_min, Vector3f(1.0, 1.0, 1.0), 1, depth);
-		calculateRefraction(color, &ray, in_min, Vector3f(1.0, 1.0, 1.0), 1, depth);
+		calculateReflection(color, &ray, in_min, Vector3f(1.0, 1.0, 1.0), ambient_intensity, depth);
+		calculateRefraction(color, &ray, in_min, Vector3f(1.0, 1.0, 1.0), ambient_intensity, depth);
 		
 
 		if(per_hit) {
@@ -173,7 +173,6 @@ void RayTracer::calculateReflection(Vector3f* color, Ray* ray, Intersection* in,
 	if (rcos>0.0){
 		for (std::vector<GeoPrimitive*>::iterator it = scene->primitives.begin(); it != scene->primitives.end(); it++) {
 			if((*it) == in->primitive) {
-				
 				continue;
 			}
 

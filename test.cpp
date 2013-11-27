@@ -44,13 +44,14 @@ int main(int argc, char **argv)
 	LocalGeo temp2;
 	Sphere sp2 = Sphere(Vector3f(2, 2, 15), Vector3f(0,1,0), 1.0);
 	GeoPrimitive g2(&sp2, &m2);
-	Sphere sp3 = Sphere(Vector3f(2, -2, 15), Vector3f(0,0,1), 1.0);
+	Sphere sp3 = Sphere(Vector3f(2, -0.5, 15), Vector3f(0,0,1), 1.0);
 	GeoPrimitive g3(&sp3, &m3);
 	//Sphere sp4 = Sphere(Vector3f(0,-1008,10), Vector3f(0,0,1), 1000.0);
 	//GeoPrimitive g4(&sp4, &m4);
 	
 	/* Light Test */
 	DirectionalLight l = DirectionalLight(Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 0.0, 0.0), Vector3f(0.57735, -0.57735, -0.57735));
+	PointLight l1 = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, -100.0, 0.0));
 	PointLight l2 = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 100.0, 0.0));
 	//DirectionalLight l2 = DirectionalLight(Vector3f(0.0, 0.0, 1.0), Vector3f(0.0, 0.0, 0.0), Vector3f(0.57735, -0.57735, -0.57735));
 	/* Camera test */
@@ -71,7 +72,7 @@ int main(int argc, char **argv)
 	sc.addPrimitiveToScene(&g3);
 	//sc.addPrimitiveToScene(&g4);
 	sc.addPrimitiveToScene(&t);
-	//sc.addLightToScene(&l);
+	sc.addLightToScene(&l1);
 	sc.addLightToScene(&l2);
 
 	/* Generating output bitmap */
