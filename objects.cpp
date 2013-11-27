@@ -9,6 +9,7 @@ Material::Material()
 	b.ka = Vector3f(0,0,0);
 	b.kr = Vector3f(0,0,0);
 	b.s = 0.0;
+	ri = 1.0;
 }
 
 Material::Material(Brdf brdf)

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "raytracer.h"
 #include "scene.h"
 #include "objects.h"
@@ -9,83 +10,69 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-
+	if(argc!=2) {
+		cout<<"Requires an argument specifying output file";
+		exit(0);
+	}
+	
 	int width = 600, height = 600;
 
-	/* Ray test */
-	Ray r;
-	r.origin = Vector3f(0,0,30);
-	r.direction = Vector3f(0,0,1);
-	r.t_min = 0;
-	r.t_max = 1000;
-
 	/* Material Test */
-	Brdf br1 = {Vector3f(0.4, 0.4, 0.4), Vector3f(0.8, 0.8, 0.8), Vector3f(0.1,0.1,0.1), Vector3f(0.2, 0.2, 0.5), 100.0};
+	Brdf br1 = {Vector3f(1.0, 0.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.1, 0.1, 0.1), Vector3f(0.0, 0.0, 0.0), 50.0};
 	Material m1(br1);
-	Brdf br2 = {Vector3f(0.2, 0.8, 0.6), Vector3f(0.2, 0.3, 0.5), Vector3f(0.1,0.1,0.1), Vector3f(0.5, 0.2, 0.3), 120.0};
+	m1.ri = 1.52;
+	Brdf br2 = {Vector3f(1.0, 1.0, 0.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.1, 0.1, 0.1), Vector3f(0.0, 0.0, 0.0), 50.0};
 	Material m2(br2);
-	Brdf br3 = {Vector3f(0.1, 0.1, 0.7), Vector3f(0.3, 0.9, 0.3), Vector3f(0.2,0.1,0.1), Vector3f(0.7, 0.7, 0.7), 300.0};
+	m2.ri = 1.52;
+	Brdf br3 = {Vector3f(0.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.1, 0.1, 0.1), Vector3f(0.0, 0.0, 0.0), 50.0};
 	Material m3(br3);
+	m3.ri = 1.52;
+	Brdf br4 = {Vector3f(0.1, 0.1, 0.1), Vector3f(1.0, 1.0, 1.0), Vector3f(0.1, 0.1, 0.1), Vector3f(1.0, 1.0, 1.0), 50.0};
+	Material m4(br4);
+	m4.ri = 1.52;
 
 	/* Primitive test */
-	Sphere sp = Sphere(Vector3f(10,0,10), Vector3f(1,0,0), 5.0);
+	Sphere sp = Sphere(Vector3f(0, 0, 20), Vector3f(1,0,0), 3.0);
 	GeoPrimitive g(&sp, &m1);
 	Vector3f vertices[3];
-	vertices[0] = Vector3f(5,0,5);
-	vertices[1] = Vector3f(-5,0,5);
-	vertices[2] = Vector3f(0,5,5);
+	vertices[0] = Vector3f(-5, 5, 17);
+	vertices[1] = Vector3f(-1, 4, 20);
+	vertices[2] = Vector3f(-6, -1, 20);
 	Triangle tr = Triangle(vertices, Vector3f(1,0,0));
-	GeoPrimitive t(&tr, &m3);
+	GeoPrimitive t(&tr, &m4);
 	Brdf* temp;
 	LocalGeo temp2;
-	temp = g.getBrdf(temp2);
-	cout<<"new temp brdf = "<<temp->ka<<"\n";
-	Sphere sp2 = Sphere(Vector3f(0,8,10), Vector3f(0,1,0), 4.0);
+	Sphere sp2 = Sphere(Vector3f(2, 2, 15), Vector3f(0,1,0), 1.0);
 	GeoPrimitive g2(&sp2, &m2);
-	Sphere sp3 = Sphere(Vector3f(-8,0,10), Vector3f(0,0,1), 5.0);
+	Sphere sp3 = Sphere(Vector3f(2, -2, 15), Vector3f(0,0,1), 1.0);
 	GeoPrimitive g3(&sp3, &m3);
-	float t_hit = 0;
-	Intersection in;
-	bool hit = g.intersect(r, &t_hit, &in);
-	cout<<"Hit - "<<hit<<"\n t = "<<t_hit<<"\n local position - "<<in.local.position[0]<<','<<in.local.position[1]<<','<<in.local.position[2]<<"\n";
-
+	//Sphere sp4 = Sphere(Vector3f(0,-1008,10), Vector3f(0,0,1), 1000.0);
+	//GeoPrimitive g4(&sp4, &m4);
+	
 	/* Light Test */
-	PointLight l = PointLight(Vector3f(1.0, 0.0, 0.0), Vector3f(0.0, 0.0, 0.0), Vector3f(0.0, 200.0, 0.0));
+	DirectionalLight l = DirectionalLight(Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 0.0, 0.0), Vector3f(0.57735, -0.57735, -0.57735));
 	PointLight l2 = PointLight(Vector3f(1.0, 1.0, 1.0), Vector3f(1.0, 1.0, 1.0), Vector3f(0.0, 100.0, 0.0));
+	//DirectionalLight l2 = DirectionalLight(Vector3f(0.0, 0.0, 1.0), Vector3f(0.0, 0.0, 0.0), Vector3f(0.57735, -0.57735, -0.57735));
 	/* Camera test */
 	Sample s;
 	s.x = 0;
 	s.y = 0;
-	Camera c(Vector3f(0,0,-20), Vector3f(0,0,0), Vector3f(0,1,0), pi/3, pi/3, width, height);
+	Camera c(Vector3f(0, 0, 5), Vector3f(0,0,15), Vector3f(0,1,0), pi/3, pi/3, width, height);
 
 	/* Sampler test */
 	Sampler smp(width, height);
 	smp.getSample();
 	s = *(smp.sample);
-	cout<<"Sample x = "<<s.x<<" y = "<<s.y<<"\n";
-
-	/* Intersection test */
-	c.generateRay(s, &r);
-	t_hit = 0;
-	hit = g.intersect(r, &t_hit, &in);
-	cout<<"Ray - \n Origin = "<<r.origin<<"\nDirection = "<<r.direction<<"\n";
-	cout<<"Hit - "<<hit<<"\n t = "<<t_hit<<"\n local position - "<<in.local.position[0]<<','<<in.local.position[1]<<','<<in.local.position[2]<<"\n";
 
 	/* Scene test */
 	Scene sc;
 	sc.addPrimitiveToScene(&g);
 	sc.addPrimitiveToScene(&g2);
-	//sc.addPrimitiveToScene(&g3);
+	sc.addPrimitiveToScene(&g3);
+	//sc.addPrimitiveToScene(&g4);
 	sc.addPrimitiveToScene(&t);
-	sc.addLightToScene(&l);
+	//sc.addLightToScene(&l);
 	sc.addLightToScene(&l2);
-
-	/* Ray Tracer single trace test */
-	cout<<"\n --------- RayTracer Single Trace----------\n";
-	Vector3f color;
-	RayTracer rt(10, &sc, &c);
-	rt.trace(r, 1, &color);
-	cout<<color;
 
 	/* Generating output bitmap */
 	BMP image;
@@ -93,6 +80,9 @@ int main(int argc, char **argv)
 	image.SetBitDepth(24);
 
 	/* Ray Tracer multi trace test*/
+	Ray r;
+	Vector3f color;
+	RayTracer rt(10, &sc, &c);
 	cout<<"\n --------- RayTracer Multi Trace----------\n";
 	while(smp.getSample()) {
 		c.generateRay(*(smp.sample), &r);
